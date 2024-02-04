@@ -13,6 +13,8 @@ class LifeCycleSample extends Component {
         console.log('constructor');
     }
 
+    // props로 받아온 값을 state에 동기화
+    // static 메서드이므로 인스턴스 this에 접근 불가
     static getDerivedStateFromProps(nextProps, prevState) {
         console.log('getDerivedStateFromProps');
         if (nextProps.color !== prevState.color) {

@@ -82,7 +82,7 @@ npm start
 
 ## 03. 컴포넌트
 
-### 내일 정리할거에요~~~ ㅠㅠ 졸려
+### 나중에 정리할거에요~~~ ㅠㅠ 졸려
 
 ## 04. 이벤트 핸들링
 
@@ -141,9 +141,155 @@ class RefSample extends Component {
 
 ## 07. 컴포넌트의 라이프 사이클 메서드
 
+### 라이프 사이클 메서드의 특징
+
+- 클래스형 컴포넌트에서만 사용 가능.
+- `<React.StrictMode>`로 App 컴포넌트를 감싸고 있기 때문에 constructor와 getDerivedStateFromProps 같은 라이프사이클 메서드가 개발 모드에서 두 번씩 호출됨. 특히 클래스 컴포넌트의 라이프사이클 메서드를 두 번 호출함으로써, 부수 효과(side effects)를 발생시키는 코드를 찾아낼 수 있게 함.
+
+### 라이브 사이클 메서드의 종류
+
+- **마운트**: DOM이 생성되고 웹 브라우저 상에 나타남.
+- **업데이트**
+  > - props가 바뀔 때.
+  > - state가 바뀔 때.
+  > - 부모 컴포넌트가 리렌더링 될 때.
+  > - this.forceUpdate로 강제로 렌더링을 트리거할 때.
+- **언마운트**: 컴포넌트를 DOM에서 제거.
+
+### 라이프 사이클 메서드의 흐름
+
 ![life cycle method](/images/component_life_cycle.webp)
 
 ## 08. Hooks
+
+### Hooks
+
+- **useState**: useState는 컴포넌트의 상태를 함수 컴포넌트 내에서 관리할 수 있게 해줌.
+
+```javascript
+import React, { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  );
+}
+```
+
+- **useEffect**: useEffect는 컴포넌트가 렌더링될 때마다 특정 작업을 수행할 수 있도록 해주는 Hook. 주로 사이드 이펙트(side effects)를 처리할 때 사용됨(데이터 fetching, 구독(subscriptions), 수동 DOM 조작 등).
+
+```javascript
+import React, { useState, useEffect } from "react";
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
+    </div>
+  );
+}
+```
+
+- **useReducer**: useReducer는 복잡한 컴포넌트의 상태 로직을 다룰 때 useState보다 더 효율적인 Hook. 액션을 기반으로 상태를 업데이트하는 로직을 외부 함수(reducer)로 분리할 수 있음.
+
+```javascript
+import React, { useReducer } from "react";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { count: state.count + 1 };
+    case "decrement":
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  return (
+    <>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: "increment" })}>+</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>-</button>
+    </>
+  );
+}
+```
+
+- **useMemo**: useMemo는 메모이제이션(memoization)된 값을 반환하는 Hook. 성능 최적화를 위해 계산량이 많은 함수의 결과값을 재사용할 때 유용함.
+
+```javascript
+import React, { useState, useMemo } from "react";
+
+const computeExpensiveValue = (a, b) => {
+  // imagine this is an expensive operation
+  return a + b;
+};
+
+function Example() {
+  const [a, setA] = useState(0);
+  const [b, setB] = useState(0);
+  const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+
+  return (
+    <div>
+      <input value={a} onChange={(e) => setA(+e.target.value)} />
+      <input value={b} onChange={(e) => setB(+e.target.value)} />
+      <p>Result: {memoizedValue}</p>
+    </div>
+  );
+}
+```
+
+- **useCallback**: useCallback은 메모이제이션된 콜백 함수를 반환. 특정 함수를 재생성하지 않고 재사용할 때 사용됨.
+
+```javascript
+import React, { useState, useCallback } from "react";
+
+function Example() {
+  const [count, setCount] = useState(0);
+  const increment = useCallback(() => {
+    setCount((c) => c + 1);
+  }, []);
+
+  return <button onClick={increment}>Increment {count}</button>;
+}
+```
+
+- **useRef**: useRef는 컴포넌트에서 DOM을 직접 선택해야 할 때 사용함. 또한, 렌더링과 관련 없는 데이터를 저장하는 용도로도 사용됨.
+
+```javascript
+import React, { useRef } from "react";
+
+function TextInputWithFocusButton() {
+  const inputEl = useRef(null);
+  const onButtonClick = () => {
+    inputEl.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputEl} type="text" />
+      <button onClick={onButtonClick}>Focus the input</button>
+    </>
+  );
+}
+```
 
 ## 09. 컴포넌트 스타일링
 
