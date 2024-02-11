@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .section {
+        height: 100vh;
+        transition: background-color 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section">섹션 1</div>
+    <div class="section">섹션 2</div>
+    <div class="section">섹션 3</div>
+    <div class="section">섹션 4</div>
+    <div class="section">섹션 5</div>
+    <div class="section">섹션 6</div>
+    <div class="section">섹션 7</div>
+  </body>
+  <script>
+    window.addEventListener("scroll", () => {
+      const colors = [
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "blue",
+        "navy",
+        "purple",
+      ];
+      const sections = document.querySelectorAll(".section");
+
+      sections.forEach((section, index) => {
+        const currentIndex = index % colors.length; // 색상 배열 길이를 넘지 않도록 인덱스 조정
+        if (window.scrollY >= section.offsetTop) {
+          section.style.backgroundColor = colors[currentIndex];
+        }
+      });
+    });
+  </script>
+</html>

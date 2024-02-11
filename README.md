@@ -2,7 +2,7 @@
 
 ## 설명
 
-- '리액트를 다루는 기술'이란 책을 공부하고 정리한 내용입니다.
+- '리액트를 다루는 기술'이란 책을 공부하고 정리한 내용입니다. 웹 서핑 및 ChatGPT4를 통해 자료를 보완했습니다.
 
 ## 목차
 
@@ -162,9 +162,13 @@ class RefSample extends Component {
 
 ## 08. Hooks
 
-### Hooks
+### useState
 
-- **useState**: useState는 컴포넌트의 상태를 함수 컴포넌트 내에서 관리할 수 있게 해줌.
+- 개념
+
+  > - useState는 컴포넌트의 상태를 함수 컴포넌트 내에서 관리할 수 있게 해줌.
+
+- 예제 코드
 
 ```javascript
 import React, { useState } from "react";
@@ -181,7 +185,13 @@ function Counter() {
 }
 ```
 
-- **useEffect**: useEffect는 컴포넌트가 렌더링될 때마다 특정 작업을 수행할 수 있도록 해주는 Hook. 주로 사이드 이펙트(side effects)를 처리할 때 사용됨(데이터 fetching, 구독(subscriptions), 수동 DOM 조작 등).
+### useEffect
+
+- 개념
+
+  > - useEffect는 컴포넌트가 렌더링될 때마다 특정 작업을 수행할 수 있도록 해주는 Hook. 주로 사이드 이펙트(side effects)를 처리할 때 사용됨(데이터 fetching, 구독(subscriptions), 수동 DOM 조작 등).
+
+- 예제 코드
 
 ```javascript
 import React, { useState, useEffect } from "react";
@@ -202,7 +212,18 @@ function Example() {
 }
 ```
 
-- **useReducer**: useReducer는 복잡한 컴포넌트의 상태 로직을 다룰 때 useState보다 더 효율적인 Hook. 액션을 기반으로 상태를 업데이트하는 로직을 외부 함수(reducer)로 분리할 수 있음.
+### useReducer
+
+- 개념
+
+  > - useReducer는 복잡한 컴포넌트의 상태 로직을 다룰 때 useState보다 더 효율적인 Hook. 액션을 기반으로 상태를 업데이트하는 로직을 외부 함수(reducer)로 분리할 수 있음.
+
+- 구성 요소
+
+  > - state: useReducer를 사용할 때의 현재 상태.
+  > - dispatch: 액션을 발생시키는 함수로, reducer 함수에 액션을 전달하여 상태를 업데이트함. 액션은 보통 type 속성을 가지며, 필요에 따라 추가 데이터를 포함할 수 있음.
+
+- 예제 코드
 
 ```javascript
 import React, { useReducer } from "react";
@@ -231,7 +252,13 @@ function Counter() {
 }
 ```
 
-- **useMemo**: useMemo는 메모이제이션(memoization)된 값을 반환하는 Hook. 성능 최적화를 위해 계산량이 많은 함수의 결과값을 재사용할 때 유용함.
+### useMemo
+
+- 개념
+
+  > - useMemo는 메모이제이션(memoization)된 값을 반환하는 Hook. 성능 최적화를 위해 계산량이 많은 함수의 결과값을 재사용할 때 유용함.
+
+- 예제 코드
 
 ```javascript
 import React, { useState, useMemo } from "react";
@@ -248,6 +275,7 @@ function Example() {
 
   return (
     <div>
+      {/* setA() 안에 '+' 기호는 단항 플러스 연산자로 피연산자를 숫자로 변환하기 위하여 사용됨 */}
       <input value={a} onChange={(e) => setA(+e.target.value)} />
       <input value={b} onChange={(e) => setB(+e.target.value)} />
       <p>Result: {memoizedValue}</p>
@@ -256,7 +284,18 @@ function Example() {
 }
 ```
 
-- **useCallback**: useCallback은 메모이제이션된 콜백 함수를 반환. 특정 함수를 재생성하지 않고 재사용할 때 사용됨.
+### useCallback
+
+- 개념
+
+  > - useCallback은 React의 Hook 중 하나로, 함수를 메모이제이션하는 데 사용됨. 즉, 컴포넌트가 리렌더링될 때마다 함수를 새로 생성하는 대신, useCallback을 사용하여 함수를 재사용할 수 있음. 이는 특히 해당 함수를 props로 하위 컴포넌트에 전달할 때 성능 최적화에 유용함.
+
+- 파라미터
+
+  > - **Callback 함수**: 메모이제이션할 함수.
+  > - **의존성 배열(Dependency array)**: 이 배열 내의 요소가 변경될 때만 함수가 업데이트됨. 배열이 비어있으면 컴포넌트가 마운트될 때 단 한 번만 함수가 생성되며, 그 후로는 재생성되지 않음.
+
+- 예제 코드
 
 ```javascript
 import React, { useState, useCallback } from "react";
@@ -271,7 +310,13 @@ function Example() {
 }
 ```
 
-- **useRef**: useRef는 컴포넌트에서 DOM을 직접 선택해야 할 때 사용함. 또한, 렌더링과 관련 없는 데이터를 저장하는 용도로도 사용됨.
+### useRef
+
+- 개념
+
+> - useRef는 컴포넌트에서 DOM을 직접 선택해야 할 때 사용함. 또한, 렌더링과 관련 없는 데이터를 저장하는 용도로도 사용됨.
+
+- 예제
 
 ```javascript
 import React, { useRef } from "react";
@@ -344,7 +389,7 @@ function TextInputWithFocusButton() {
 - **컴포넌트 기반 개발 지원**: React, Vue와 같은 컴포넌트 기반 프레임워크와 잘 어울리며, 각 컴포넌트에 대한 스타일을 캡슐화하여 모듈화할 수 있음.
 - **명시적인 종속성 관리**: CSS Module은 JavaScript import 문을 통해 CSS 파일을 명시적으로 불러옴으로써, 스타일의 종속성을 명확하게 관리할 수 있게 해줌.
 
-### 프론트엔드 관련 모듈
+### 라이브러리
 
 #### SASS (Syntactically Awesome Style Sheets)
 
@@ -393,9 +438,141 @@ export default Button;
 
 ## 10. 일정 관리 앱 애플리케이션 만들기
 
+### props
+
+#### 개념
+
+- React에서 props는 properties의 줄임말로, 컴포넌트 간에 데이터를 전달하는 방법. props는 부모 컴포넌트로부터 자식 컴포넌트로 데이터를 전달할 때 사용되며, 주로 컴포넌트의 재사용성을 높이고, 유지 보수를 용이하게 하는 데 기여함. props는 읽기 전용이며, 컴포넌트 내에서는 수정할 수 없음.
+
+#### 작동방식
+
+- 부모 컴포넌트에서 자식 컴포넌트로 props를 전달.
+- 자식 컴포넌트는 전달받은 props를 사용하여 렌더링하거나 다른 로직을 처리.
+- props는 객체 형태로 전달되며, 자식 컴포넌트에서는 이 객체의 속성을 통해 전달받은 데이터에 접근할 수 있음.
+
+#### 예제
+
+- App.js
+
+```javascript
+import React from "react";
+import Greeting from "./Greeting";
+
+const App = () => {
+  return (
+    <div>
+      <Greeting name="John" />
+    </div>
+  );
+};
+
+export default App;
+```
+
+- Gretting.js
+
+```javascript
+import React from "react";
+
+const Greeting = (props) => {
+  return <h1>Hello, {props.name}!</h1>;
+};
+
+export default Greeting;
+```
+
+### 라이브러리
+
+#### react-icons
+
+- React 프로젝트에서 사용할 수 있는 아이콘 라이브러리. 이 라이브러리는 Font Awesome, Material Design Icons, Typicons, GitHub Octicons 등과 같은 여러 인기 있는 아이콘 세트를 포함하고 있음. react-icons를 사용하면, 이러한 다양한 아이콘 세트에서 필요한 아이콘을 쉽게 찾아 React 컴포넌트로 가져와서 사용할 수 있음.
+- **다양한 아이콘 세트 지원**: Font Awesome, Material Icons, Ionicons 등 여러 인기 있는 아이콘 라이브러리에서 아이콘을 사용할 수 있음.
+- **SVG 기반**: 모든 아이콘은 SVG 형식으로 제공되므로, 크기 조정이 자유롭고, 화질 저하 없이 깨끗한 이미지를 유지할 수 있음.
+- **트리 쉐이킹(Tree Shaking) 지원**: 필요한 아이콘만 번들(bundle)에 포함되므로, 애플리케이션의 최종 파일 크기를 줄일 수 있음.
+
+```javascript
+import { FaCoffee } from "react-icons/fa";
+
+const MyComponent = () => {
+  return <FaCoffee />;
+};
+```
+
 ## 11. 컴포넌트 성능 최적화
 
+### 크롬 개발자 콘솔에서 Performance 녹화로 성능 체크
+
+1. **크롬 개발자 도구 열기**: 원하는 페이지에서 우클릭 후 '검사'를 선택하거나, 단축키 (Windows/Linux의 경우 Ctrl+Shift+I, macOS의 경우 Cmd+Opt+I)를 사용해 개발자 도구를 오픈.
+2. **Performance 탭으로 이동**: 상단 탭에서 'Performance'를 선택.
+3. **녹화 시작**: 녹화 버튼(작은 원 모양)을 클릭하여 성능 데이터의 녹화를 시작. 페이지를 새로고침하거나 특정 동작을 수행하여 분석하고자 하는 작업을 실행.
+4. **녹화 중지**: 분석할 동작이 끝나면, 녹화 중지 버튼(녹화 시작 버튼 옆의 사각형 모양)을 클릭.
+5. **성능 데이터 분석**: 녹화가 완료되면 타임라인, 프레임 레이트, 자바스크립트 실행 시간 등 다양한 성능 지표를 확인할 수 있음. 이를 통해 성능 병목을 식별하고 최적화할 수 있음.
+
+### export default React.memo()
+
+- React.memo는 컴포넌트의 리렌더링 성능을 최적화하기 위한 고차 컴포넌트(Higher Order Component, HOC). React.memo로 감싼 컴포넌트는 props 변경이 없으면 리렌더링되지 않음. 즉, 동일한 props로는 이전에 렌더링된 결과를 재사용함. 이 방식은 특히 리스트와 같이 데이터가 변경되지 않는 많은 수의 컴포넌트를 렌더링해야 할 때 유용함.
+
+- `export default React.memo(MyComponent);`로 컴포넌트를 내보내면, 이 컴포넌트를 사용하는 곳에서는 메모이제이션이 적용된 버전의 컴포넌트를 받게 됨. 이는 컴포넌트의 불필요한 리렌더링을 방지하여 애플리케이션의 성능을 개선할 수 있음.
+
+- 예제
+
+```javascript
+const MyComponent = React.memo(function MyComponent(props) {
+  /* render using props */
+});
+```
+
 ## 12. immer를 사용하여 더 쉽게 불변성 유지하기
+
+### 불변성(Immutability)
+
+- React에서 불변성(Immutability)은 데이터가 변경될 때 기존의 데이터를 수정하지 않고, 새로운 데이터를 생성하여 사용하는 개념. 불변성을 지키는 것은 React의 재렌더링 성능 최적화에 중요한 역할을 함. React는 컴포넌트의 상태(state)나 속성(props)이 변경되었는지 확인하기 위해 이전 상태와 비교하는데, 불변성을 유지하면 이 비교 과정을 효율적으로 만들 수 있음.
+
+- 불변성을 지키지 않는 예
+
+```javascript
+const myArray = [1, 2, 3];
+myArray.push(4); // myArray를 직접 변경
+```
+
+- 불변성을 지키는 예
+
+```javascript
+const myArray = [1, 2, 3];
+const newArray = [...myArray, 4]; // 새 배열을 생성하여 변경
+```
+
+- 불변성이 중요한 이유
+
+> - **변경 감지 용이성**: React와 같은 라이브러리나 프레임워크에서는 컴포넌트의 상태가 변경되었을 때, 이를 감지하고 해당 컴포넌트를 다시 렌더링. 객체의 불변성을 유지하면, 단순한 비교(얕은 비교)로 객체의 변경 여부를 판단할 수 있음. 즉, 객체의 참조가 변경되었다는 것은 내용이 변경되었다는 명확한 신호가 됨. 반면에 객체 내부를 직접 변경하면, 변경 사항을 감지하기 위해 객체의 깊은 비교(객체 내부까지 비교)를 해야 하며, 이는 성능 저하를 초래할 수 있음.
+
+> - **순수 함수와의 호환성**: 순수 함수는 동일한 입력에 대해 항상 동일한 출력을 반환하며, 외부 상태를 변경하지 않고 부작용(side effects)이 없는 함수. 불변성을 유지하면 함수가 외부 상태를 변경하지 않으므로 순수 함수의 조건을 만족시킴. 이는 코드의 예측 가능성과 재사용성을 높여줌.
+
+> - **프로그램의 안정성 향상**: 데이터를 직접 변경하지 않고 새로운 객체를 생성함으로써, 원본 데이터가 의도치 않게 변경되는 것을 방지할 수 있음. 이는 특히 여러 컴포넌트에서 같은 데이터를 참조할 때 중요함. 하나의 컴포넌트에서 데이터를 변경하면, 그 변경 사항이 다른 컴포넌트에도 영향을 미치게 되어 버그가 발생할 수 있음. 불변성을 유지함으로써 이러한 문제를 방지할 수 있음.
+
+### 라이브러리
+
+#### immer
+
+- **개념**: Immer는 JavaScript의 불변성을 쉽게 관리할 수 있도록 도와주는 라이브러리. React 개발에서 상태 관리를 할 때 불변성을 유지하는 것이 중요하지만, 복잡한 상태 객체나 배열을 직접 수정하지 않고 새로운 상태를 생성하는 것은 번거로울 수 있음. 이때 Immer를 사용하면 기존의 변경 가능한 방식으로 코드를 작성하되, 내부적으로는 불변성을 유지한 새로운 상태를 생성해줌.
+
+- **특징**
+
+  > - **간결한 코드**: 복잡한 상태 업데이트 로직을 보다 간결하게 작성할 수 있음. Immer를 사용하면 불변성을 직접 관리하는 복잡한 코드 없이 상태를 업데이트할 수 있음.
+  > - **성능 최적화**: Immer는 내부적으로 변경 사항을 추적하여 필요한 부분만 업데이트. 이는 큰 데이터 구조를 다룰 때도 성능을 유지하는 데 도움이 됨.
+  > - **사용 용이성**: Immer는 사용하기 쉬우며, 기존의 JavaScript 지식을 그대로 활용할 수 있어 학습 곡선이 낮음.
+
+- **예제 코드**
+
+```javascript
+import produce from "immer";
+
+const initialState = { name: "John", age: 25 };
+
+const nextState = produce(initialState, (draftState) => {
+  draftState.age = 26;
+});
+```
 
 ## 13. 리액트 라우터로 SPA 개발하기
 
