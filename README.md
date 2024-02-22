@@ -112,7 +112,7 @@ class ClassComponent extends React.Component {
 
 3. 라이프사이클 메서드
 
-- **함수형 컴포넌트**: 이전에는 라이프사이클 메서드를 사용할 수 없었지만, useEffect Hook을 통해 컴포넌트의 생명주기를 효과적으로 관리할 수 있게 되었음.
+- **함수형 컴포넌트**: 이전에는 라이프사이클 메서드를 사용할 수 없었지만, `useEffect` Hook을 통해 컴포넌트의 생명주기를 효과적으로 관리할 수 있게 되었음.
 
 - **클래스형 컴포넌트**: `componentDidMount`, `componentDidUpdate`, `componentWillUnmount` 등의 라이프사이클 메서드를 사용하여 컴포넌트의 생명주기 이벤트를 관리.
 
@@ -920,7 +920,232 @@ console.log(stringified);
 
 ## 14. 외부 API를 연동하여 뉴스 뷰어 만들기
 
+### 비동기 프로그래밍
+
+#### promise
+
+- **개념**: Promise는 비동기 작업의 최종 성공 또는 실패를 나타내는 객체. then, catch, finally 메서드를 통해 비동기 작업의 결과를 처리.
+
+- 예제 코드
+
+```javascript
+const myPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("Operation succeeded");
+    // reject("Operation failed"); // 실패 시
+  }, 1000);
+});
+
+myPromise
+  .then((result) => {
+    console.log(result); // "Operation succeeded"
+  })
+  .catch((error) => {
+    console.error(error);
+  })
+  .finally(() => {
+    console.log("Promise is settled.");
+  });
+```
+
+#### async/await
+
+- **개념**: async와 await는 Promise를 더 쉽게 사용할 수 있도록 하는 ES8(ES2017)의 문법. async 함수 내에서 await 키워드를 사용하면, Promise의 실행이 완료될 때까지 함수의 실행을 일시 중지하고, 결과값을 기다림.
+
+- 예제 코드
+
+```javascript
+async function fetchData() {
+  try {
+    const response = await fetch("https://api.example.com/data");
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+fetchData();
+```
+
+### Fetch, Axios, AJAX
+
+#### Fetch
+
+- **개념**: fetch API는 자바스크립트에서 HTTP 요청을 실행하기 위한 내장 함수. Promise 기반으로 작동.
+
+- 예제 코드
+
+```javascript
+fetch("https://api.example.com/data")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+#### Axios
+
+- **개념**: Axios는 브라우저와 Node.js에서 사용할 수 있는 HTTP 클라이언트 라이브러리. 자동 변환, 요청 취소 등의 추가 기능을 제공.
+
+- 예제 코드
+
+```javascript
+axios
+  .get("https://api.example.com/data")
+  .then((response) => console.log(response.data))
+  .catch((error) => console.error("Error:", error));
+```
+
+#### AJAX
+
+- **개념**: AJAX는 웹 페이지가 비동기적으로 서버와 데이터를 교환할 수 있게 하는 개발 방식. XMLHttpRequest 객체를 사용. 현대 웹 애플리케이션에서는 JSON을 더 많이 사용하며, fetch나 axios 같은 라이브러리로 대체되는 추세.
+
+- 예제 코드
+
+```javascript
+const xhr = new XMLHttpRequest();
+xhr.open("GET", "https://api.example.com/data", true);
+xhr.onreadystatechange = function () {
+  if (xhr.readyState === 4 && xhr.status === 200) {
+    console.log(JSON.parse(xhr.responseText));
+  }
+};
+xhr.send();
+```
+
+### 벤더 프리픽스
+
+- **개념**: 벤더 프리픽스(Vendor Prefixes)는 웹 브라우저 제조사가 새로운 실험적 기능을 제공할 때, 해당 기능이 아직 표준이 아니거나 표준화 과정 중에 있을 때 사용하는 접두사입니다. 이러한 접두사는 웹 개발자가 특정 브라우저에서만 작동하는 기능을 사용할 수 있게 해주며, 다른 브라우저에서는 해당 스타일이나 기능이 적용되지 않도록 합니다. 벤더 프리픽스를 사용하면 웹 표준이 확립되기 전에 새로운 CSS 속성이나 JavaScript API를 안전하게 실험할 수 있습니다.
+
+- **주요 벤더 프리픽스**
+
+  > - **-webkit-**: Safari, Chrome, 새로운 Edge(크로미움 기반), Opera(크로미움 기반) 등 WebKit 또는 Blink 엔진을 사용하는 브라우저용.
+  > - **-moz-**: Firefox 브라우저용.
+  > - **-o-**: 구 Opera 브라우저용.
+  > - **-ms-**: 구 Internet Explorer 및 구 Edge 브라우저용.
+
+- **예제 코드**
+
+```css
+.box {
+  -webkit-border-radius: 10px; /* Chrome, Safari, 새로운 Opera, 새로운 Edge */
+  -moz-border-radius: 10px; /* Firefox */
+  border-radius: 10px; /* 표준화된 속성 */
+}
+```
+
+### 라이브러리
+
+#### styled-components
+
+- **개념**: styled-components는 React 및 기타 컴포넌트 기반 라이브러리에서 사용할 수 있는 CSS-in-JS 라이브러리. 이 라이브러리를 사용하면 JavaScript 내에서 CSS를 선언적이고 유지 관리가 용이한 방식으로 작성할 수 있음. styled-components의 주요 목적은 컴포넌트의 스타일을 컴포넌트의 로직과 구조와 밀접하게 결합하여, 컴포넌트를 완전히 독립적이고 재사용 가능하게 만드는 것.
+
+- **특징**
+
+  > - **컴포넌트 기반 스타일링**: 각 스타일은 컴포넌트에 직접 연결되어 있으며, 이를 통해 구성 요소별 스타일의 격리가 가능.
+  > - **실시간 스타일 변경**: props를 통해 스타일을 동적으로 변경할 수 있으며, 이를 통해 다양한 상태에 따른 스타일 변화를 쉽게 구현할 수 있음.
+  > - **자동 벤더 프리픽스**: styled-components는 자동으로 CSS에 필요한 벤더 프리픽스를 추가해줌. 이로 인해 다양한 브라우저에서의 호환성 문제를 줄일 수 있음.
+  > - **SSR(Server-Side Rendering) 지원**: 서버 사이드 렌더링과 함께 사용할 수 있으며, 이를 통해 초기 로딩 성능을 개선하고 검색 엔진 최적화(SEO)를 향상시킬 수 있음.'
+
+- **예제 코드**
+
+```javascript
+import styled from "styled-components";
+
+// 버튼 컴포넌트 생성
+const Button = styled.button`
+  background-color: ${(props) => (props.primary ? "blue" : "white")};
+  color: ${(props) => (props.primary ? "white" : "blue")};
+
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid blue;
+  border-radius: 3px;
+`;
+
+function App() {
+  return (
+    <div>
+      <Button primary>Primary Button</Button>
+      <Button>Default Button</Button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+#### axios
+
+- **개념**: axios는 Node.js 환경에서 HTTP 요청을 보내기 위한 JavaScript 라이브러리. 이 라이브러리는 Promise 기반으로 동작하기 때문에 비동기적인 방식으로 HTTP 요청을 처리할 수 있음. axios를 사용하면 GET, POST, PUT, DELETE 등의 HTTP 메서드를 사용하여 서버와 통신할 수 있으며, 요청을 보내고 응답을 받는 과정을 쉽게 처리할 수 있음.
+
+- **특징**
+  > - **브라우저와 Node.js에서 모두 사용 가능**: axios는 브라우저뿐만 아니라 Node.js에서도 사용할 수 있어서 프론트엔드와 백엔드 양쪽에서 활용할 수 있음.
+  > - **Promise 기반의 비동기 처리**: HTTP 요청을 비동기적으로 처리하고, then이나 async/await을 사용하여 응답을 처리할 수 있음.
+  > - **요청과 응답의 인터셉터**: 요청을 보내기 전이나 서버로부터 응답을 받은 후에 이를 가로채어 추가적인 처리를 할 수 있는 기능을 제공.
+  > - **요청 취소**: 이미 보낸 요청을 취소할 수 있는 기능을 제공.
+  > - **자동 변환**: 요청 데이터는 자동으로 JSON으로 변환되며, 응답 데이터도 자동으로 JSON 객체로 변환.
+  > - **클라이언트 측 보호**: CSRF(Cross-Site Request Forgery)와 같은 공격으로부터 보호받을 수 있는 기능을 포함.
+  > - **넓은 브라우저 호환성**: axios는 다양한 버전의 브라우저에서 호환됨.
+
 ## 15. Context API
+
+### Context API
+
+- Context API는 React 16.3에서 도입된 기능으로, 컴포넌트 트리 전체에 걸쳐 데이터를 효율적으로 전달(공유)할 수 있는 방법을 제공. 이를 통해 prop-drilling(각 레벨을 거쳐 prop을 전달하는 것)의 번거로움 없이 컴포넌트 간에 데이터를 공유할 수 있음. 주로 전역 상태 관리, 테마 설정, 사용자 인증 정보 등 애플리케이션 전반에서 필요한 데이터를 관리하는 데 사용됨.
+
+### Consumer 그리고 Provider
+
+- **Consumer**: Context를 사용하여 컴포넌트 트리에 데이터를 공급하는 컴포넌트. Provider는 value prop을 통해 자식 컴포넌트에게 전달할 데이터를 받음. Provider를 사용하면, 이를 자식 컴포넌트에서 접근할 수 있게 됨.
+
+```javascript
+import React, { useContext } from "react";
+import { ThemeContext } from "./ThemeContext"; // Context 파일을 임포트
+
+function ThemeConsumerComponent() {
+  const theme = useContext(ThemeContext);
+
+  return (
+    <div style={{ background: theme === "dark" ? "#333" : "#FFF" }}>
+      현재 테마는 {theme}입니다.
+    </div>
+  );
+}
+```
+
+- **Provider**: Context 데이터를 구독하는 컴포넌트. Consumer 컴포넌트는 Context에서 제공하는 데이터를 사용할 수 있음. Consumer는 함수 as a child 또는 render props 패턴을 사용하여 Context의 데이터에 접근함. 이 함수는 Context의 현재 값을 인자로 받아 컴포넌트를 반환.
+
+```javascript
+import React, { useState } from "react";
+import { ThemeContext } from "./ThemeContext"; // Context 파일을 임포트
+
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState("dark");
+
+  return (
+    <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+  );
+};
+```
+
+### 필수 요소
+
+- **Context 생성하기**: React.createContext 메소드를 사용하여 Context를 생성. 이 메소드는 Provider와 Consumer 컴포넌트를 포함하는 객체를 반환.
+
+```javascript
+const MyContext = React.createContext(defaultValue);
+```
+
+- **Context의 동적 업데이트**: Provider의 value prop을 변경함으로써, Context의 값을 동적으로 업데이트할 수 있음. 이렇게 하면 Provider 아래에 있는 모든 Consumer 컴포넌트가 새로운 값을 받아 리렌더링됨.
+
+- **클래스 컴포넌트에서 Context 사용하기**: 클래스 컴포넌트에서는 static contextType을 사용하거나, <MyContext.Consumer>를 사용하여 Context 데이터에 접근할 수 있음. contextType을 사용하면 this.context를 통해 Context의 값을 직접 사용할 수 있음.
+
+- **Context와 Hooks**: React Hooks를 사용하는 함수 컴포넌트에서는 useContext Hook을 사용하여 Context의 값을 더 쉽게 사용할 수 있음. useContext는 Context 객체를 인자로 받아 그 Context의 현재 값을 반환함.
+
+```javascript
+const value = useContext(MyContext);
+```
 
 ## 16. 리덕스 라이브러리 이해하기
 
