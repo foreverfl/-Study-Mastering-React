@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redux Counter Example</title>
+    <style>
+      body,
+      html {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      #app {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1 id="counter">0</h1>
+      <button id="increment">Increment</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/redux@4.0.5/dist/redux.min.js"></script>
+    <script>
+      // 액션 타입 정의
+      const INCREMENT = "INCREMENT";
+
+      // 액션 생성 함수
+      function increment() {
+        return { type: INCREMENT };
+      }
+
+      // 리듀서 함수
+      function counterReducer(state = { count: 0 }, action) {
+        switch (action.type) {
+          case INCREMENT:
+            return { count: state.count + 1 };
+          default:
+            return state;
+        }
+      }
+
+      // 스토어 생성
+      const store = Redux.createStore(counterReducer);
+
+      // UI 업데이트 함수
+      function render() {
+        const state = store.getState();
+        document.getElementById("counter").textContent = state.count;
+      }
+
+      // 스토어 구독
+      store.subscribe(render);
+
+      // 초기 렌더링
+      render();
+
+      // 이벤트 리스너 설정
+      document.getElementById("increment").addEventListener("click", () => {
+        store.dispatch(increment());
+      });
+    </script>
+  </body>
+</html>
