@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import './index.css';
@@ -12,10 +12,12 @@ const store = configureStore({
   // 추가 설정이 필요한 경우, 이곳에 미들웨어 등을 구성할 수 있음
 });
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
   <Provider store={store}>
     <App />
-  </Provider>,
-  document.getElementById('root'),
+  </Provider>
 );
 

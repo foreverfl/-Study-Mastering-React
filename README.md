@@ -28,11 +28,6 @@
 20. [서버 사이드 렌더링](#20-서버-사이드-렌더링)
 21. [백엔드 프로그래밍](#21-백엔드-프로그래밍)
 22. [mongoose를 이용한 mongoDB 연동 실습](#22-mongoose를-이용한-mongodb-연동-실습)
-23. [JWT를 통한 회원 인증 시스템 구현하기](#23-jwt를-통한-회원-인증-시스템-구현하기)
-24. [프런트앤드 프로젝트: 시작 및 인증 구현](#24-프런트앤드-프로젝트-시작-및-인증-구현)
-25. [프런트엔드 프로적트: 글쓰기 기능 구현하기](#25-프런트엔드-프로적트-글쓰기-기능-구현하기)
-26. [프런트엔드 프로젝트: 포스트 조회 기능 구현하기](#26-프런트엔드-프로젝트-포스트-조회-기능-구현하기)
-27. [프런트엔드 프로젝트: 수정/삭제 기능 구현 및 마무리](#27-프런트엔드-프로젝트-수정삭제-기능-구현-및-마무리)
 
 ## 01. 리액트 시작
 
@@ -789,6 +784,18 @@ const newArray = [...myArray, 4]; // 새 배열을 생성하여 변경
   > - **성능 최적화**: Immer는 내부적으로 변경 사항을 추적하여 필요한 부분만 업데이트. 이는 큰 데이터 구조를 다룰 때도 성능을 유지하는 데 도움이 됨.
   > - **사용 용이성**: Immer는 사용하기 쉬우며, 기존의 JavaScript 지식을 그대로 활용할 수 있어 학습 곡선이 낮음.
 
+- **produce 함수의 기본 구조**
+
+  > - produce 함수는 두 가지 인자를 받을 수 있음.
+  > - **현재 상태(currentState)**: 업데이트하고자 하는 현재 상태.
+  > - **생산자 함수(producer function)**: 이 함수는 첫 번째 인자로 드래프트 상태(draft state)를 받음. 드래프트 상태는 현재 상태의 프록시(proxy)로, 이 드래프트 상태를 변경하는 것이 실제 상태에 변경을 적용. 생산자 함수 내에서는 이 드래프트 상태를 직접 변경할 수 있으며, Immer는 이러한 변경사항을 기반으로 새로운 불변 상태를 생성함.
+
+- **내부 관리 방법**
+
+  > - Immer는 내부적으로 프록시(Proxy)를 사용하여 드래프트 상태를 관리. 생산자 함수 내에서 드래프트 상태에 대한 변경은 실제로 프록시 객체를 통해 이루어짐. 이때, 변경사항은 불변성을 유지하면서 새로운 상태 객체를 생성하는 데 사용됨.
+  > - **드래프트 상태**: 현재 상태의 가변적인 복사본. 이 드래프트 상태에 대한 변경은 원본 상태에는 영향을 주지 않음.
+  > - **프록시**: 드래프트 상태에 대한 변경사항을 가로채고 기록. 생산자 함수가 완료되면, Immer는 이 기록된 변경사항을 사용하여 원본 상태의 불변 복사본을 생성함.
+
 - **예제 코드**
 
 ```javascript
@@ -1171,6 +1178,76 @@ const value = useContext(MyContext);
 
 ### 라이브러리
 
+#### redux
+
+- **개념**: Redux는 JavaScript 앱을 위한 예측 가능한 상태 컨테이너. 주로 React와 함께 사용되지만, Angular, Vue 등 다른 JavaScript 프레임워크나 라이브러리와도 함께 사용될 수 있음. Redux는 애플리케이션의 상태를 전역적으로 관리하기 위해 사용되며, 상태 관리 로직을 애플리케이션에서 분리하여 중앙에서 관리할 수 있게 해줌.
+
+- **구조**
+  ![redux flow](/images/redux_flow.gif)
+  _출처: https://dev.to/oahehc/redux-data-flow-and-react-component-life-cycle-11n_
+
+- **특징**
+  > - **단일 스토어(Single source of truth)**: 애플리케이션의 상태는 하나의 객체 트리로 저장되며, 하나의 스토어 내에 존재함.
+  > - **상태는 읽기 전용(State is read-only)**: 상태를 변경할 수 있는 유일한 방법은 액션을 디스패치하는 것임. 액션은 상태 변화를 일으키는 정보를 나타내는 객체.
+  > - **리듀서로 변경(Reductions are made with pure functions)**: 액션에 의해 상태 트리가 어떻게 변할지를 결정하는 리듀서는 순수 함수로 작성됨.
+
+#### react-redux
+
+- **개념**: React-Redux는 React 애플리케이션에서 Redux를 효율적으로 사용할 수 있도록 해주는 공식 바인딩 라이브러리. Redux는 애플리케이션의 상태 관리를 위한 라이브러리로, 애플리케이션의 상태를 예측 가능한 방식으로 관리할 수 있게 해줌. React-Redux는 이러한 Redux의 기능을 React 컴포넌트와 쉽게 연결할 수 있게 해주는 인터페이스를 제공함.
+
+- **주요 기능**
+
+  > - **Provider 컴포넌트**: Provider는 React-Redux의 가장 기본적인 컴포넌트로, Redux 스토어를 애플리케이션의 모든 컴포넌트에 전달하기 위해 사용됨. 일반적으로 애플리케이션의 최상위 컴포넌트에서 사용되며, 모든 하위 컴포넌트가 Redux 스토어에 접근할 수 있게 해줌.
+  > - **connect 함수**: connect는 React 컴포넌트를 Redux 스토어에 "연결(connect)"하기 위해 사용되는 고차 컴포넌트(Higher Order Component, HOC)를 생성하는 함수. connect 함수를 사용하여 컴포넌트의 props로 상태와 액션 생성 함수를 전달할 수 있음. 이를 통해 컴포넌트는 Redux 스토어의 상태를 직접적으로 조회하거나 액션을 디스패치할 수 있음.
+  > - **Hooks**: React-Redux 7.1.0부터는 React의 Hooks API를 사용하여 Redux 스토어와의 상호작용을 더욱 쉽게 만들어주는 여러 훅을 도입함. 주요 훅으로는 useSelector와 useDispatch가 있으며, 이를 통해 클래스 컴포넌트에서 connect 함수를 사용하는 대신 함수 컴포넌트에서 직접적으로 스토어의 상태를 조회하거나 액션을 디스패치할 수 있음.
+
+- **장점**
+
+  > - **예측 가능한 상태 관리**: Redux의 핵심 원칙과 함께, React-Redux는 애플리케이션 상태의 일관성과 예측 가능성을 보장함.
+  > - **성능 최적화**: React-Redux는 컴포넌트가 필요로 하는 데이터의 최소 집합에 대해서만 리렌더링을 트리거함. 이는 애플리케이션의 성능을 최적화하는 데 도움이 됨.
+  > - **개발자 도구 지원**: Redux DevTools와의 통합을 통해 애플리케이션의 상태 변화를 시각적으로 모니터링하고 디버깅할 수 있음.
+  > - **커뮤니티 및 생태계**: Redux와 React-Redux는 널리 사용되며 강력한 커뮤니티 지원과 풍부한 미들웨어/확장 프로그램 생태계를 가지고 있음.
+
+- **훅(Hooks)**
+  > - **useSelector**: useSelector 훅은 Redux 스토어의 상태를 조회할 수 있게 해줌. 이 훅은 선택자 함수를 인자로 받아, 해당 함수를 통해 Redux 스토어의 특정 부분의 상태를 반환함.
+
+```javascript
+import { useSelector } from "react-redux";
+
+function MyComponent() {
+  const value = useSelector((state) => state.someReducer.value);
+  return <div>{value}</div>;
+}
+```
+
+> - **useDispatch**: useDispatch 훅은 Redux 스토어의 dispatch 함수를 반환함. 이를 통해 액션을 디스패치할 수 있음.
+
+```javascript
+import { useDispatch } from "react-redux";
+
+function MyComponent() {
+  const dispatch = useDispatch();
+
+  const onClick = () => {
+    dispatch({ type: "SOME_ACTION" });
+  };
+
+  return <button onClick={onClick}>Dispatch action</button>;
+}
+```
+
+> - **useStore**: useStore 훅은 Redux 스토어 자체를 반환함. 이는 일반적인 상황에서는 잘 사용되지 않으며, 보다 복잡한 상황에서 스토어의 메서드에 직접 접근할 필요가 있을 때 사용됨.
+
+```javascript
+import { useStore } from "react-redux";
+
+function MyComponent() {
+  const store = useStore();
+  // store.getState() 등의 메서드 사용 가능
+  return <div />;
+}
+```
+
 #### @reduxjs/toolkit
 
 - **개념**: @reduxjs/toolkit (Redux Toolkit)은 Redux를 사용하여 애플리케이션의 상태 관리 로직을 더 쉽게 작성할 수 있도록 도와주는 공식 도구. Redux Toolkit은 Redux 개발자들이 일반적으로 직면하는 몇 가지 문제를 해결하려고 설계되었으며, Redux를 사용할 때 필요한 보일러플레이트 코드를 줄여줌.
@@ -1192,7 +1269,136 @@ const value = useContext(MyContext);
   > - **Reduce Boilerplate in Reducers**: handleActions() 함수는 여러 액션 타입에 대한 케이스를 한 곳에서 처리할 수 있도록 해주며, 리듀서의 코드 양을 줄여줌.
   > - **Flux Standard Action (FSA) Compliance**: 생성된 액션 객체가 FSA 규칙을 따르도록 보장합니다. 이는 액션 객체의 구조를 표준화하고, 애플리케이션 전반에서 액션을 더 일관되게 처리할 수 있게 함.
 
+- **createAction()**
+
+  > - **개념**: createAction 함수는 액션 타입 문자열을 인자로 받고, 액션 생성자 함수를 반환함. 이 액션 생성자 함수는 선택적으로 payload를 생성하기 위한 함수를 두 번째 인자로 받을 수 있음. 생성된 액션 객체는 Flux Standard Action(FSA) 형태를 따름. 즉, { type, payload, error, meta } 구조를 가짐.
+
+  > - **매개변수**: createAction(type, [payloadCreator], [metaCreator])
+  >   > - **type**: 액션의 타입을 나타내는 문자열입니다.
+  >   > - **payloadCreator**: (선택사항) payload를 생성하는 함수입니다. 이 함수의 반환값이 액션의 payload 필드에 설정됩니다.
+  >   > - **metaCreator**: (선택사항) 액션의 meta 필드를 생성하는 함수입니다.
+
+  > - **예제 코드**
+
+```javascript
+import { createAction } from "redux-actions";
+
+// 액션 타입 정의
+const INCREMENT = "INCREMENT";
+const DECREMENT = "DECREMENT";
+
+// 액션 생성자 함수
+const increment = createAction(INCREMENT);
+const decrement = createAction(DECREMENT, (amount) => amount);
+
+// 사용 예
+console.log(increment()); // { type: 'INCREMENT' }
+console.log(decrement(5)); // { type: 'DECREMENT', payload: 5 }
+```
+
+- **handleActions()**
+
+  > - **개념**: handleActions 함수는 리듀서를 더 간결하게 작성할 수 있게 해주며, 첫 번째 인자로 액션 핸들러의 맵(객체)를, 두 번째 인자로 초기 상태를 받음. 각 키는 액션 타입이며, 값은 해당 액션을 처리할 함수임.
+
+  > - **매개변수**: handleActions(reducerMap, defaultState)
+  >   > - **reducerMap**: 각 액션 타입에 대응하는 리듀서 함수를 매핑한 객체.
+  >   > - **defaultState**: 리듀서의 초기 상태.
+
+  > - **예제 코드**
+
+```javascript
+import { handleActions } from "redux-actions";
+
+const initialState = { count: 0 };
+
+const counterReducer = handleActions(
+  {
+    [INCREMENT]: (state, action) => ({ count: state.count + 1 }),
+    [DECREMENT]: (state, action) => ({ count: state.count - action.payload }),
+  },
+  initialState
+);
+
+// 사용 예
+const state1 = counterReducer(initialState, increment());
+console.log(state1); // { count: 1 }
+
+const state2 = counterReducer(state1, decrement(2));
+console.log(state2); // { count: -1 }
+```
+
 ## 18. 리덕스 미들웨어를 통한 비동기 작업 관리
+
+### 라이브러리
+
+#### redux-logger
+
+- **개념**: redux-logger는 Redux 액션 및 상태 변화를 콘솔에 기록(log)하는 미들웨어. 개발 과정에서 애플리케이션의 상태 변화를 추적하고 디버깅하기 위해 유용함.
+
+- **예제 코드**
+
+```javascript
+import { createStore, applyMiddleware } from "redux";
+import logger from "redux-logger";
+import rootReducer from "./reducers";
+
+const store = createStore(rootReducer, applyMiddleware(logger));
+```
+
+#### redux-thunk
+
+- **개념**: redux-thunk는 비동기 작업을 처리하기 위한 Redux 미들웨어. 액션 대신 함수를 디스패치할 수 있게 해줌으로써, 비동기 로직(예: API 호출)을 실행한 후 그 결과에 따라 액션을 디스패치할 수 있음.
+
+- **예제 코드**
+
+```javascript
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import rootReducer from "./reducers";
+
+// 스토어 생성
+const store = createStore(rootReducer, applyMiddleware(thunk));
+
+// Thunk 액션 생성자
+const fetchUserData = () => (dispatch) => {
+  fetch("/user/data")
+    .then((response) => response.json())
+    .then((data) => dispatch({ type: "SET_USER_DATA", payload: data }))
+    .catch((error) => dispatch({ type: "FETCH_ERROR", payload: error }));
+};
+```
+
+#### redux-saga
+
+- **개념**: redux-saga는 복잡한 비동기 작업 및 사이드 이펙트를 관리하기 위한 Redux 미들웨어. ES6의 Generator를 사용하여 비동기 흐름을 쉽게 읽고 쓸 수 있게 해줌.
+
+- **예제 코드**
+
+```javascript
+import { createStore, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
+import { takeEvery, call, put } from "redux-saga/effects";
+import rootReducer from "./reducers";
+
+function* fetchUserDataSaga() {
+  try {
+    const data = yield call(fetch, "/user/data");
+    const jsonData = yield data.json();
+    yield put({ type: "SET_USER_DATA", payload: jsonData });
+  } catch (error) {
+    yield put({ type: "FETCH_ERROR", payload: error });
+  }
+}
+
+function* mySaga() {
+  yield takeEvery("FETCH_USER_DATA", fetchUserDataSaga);
+}
+
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(mySaga);
+```
 
 ## 19. 코드 스플리팅
 
@@ -1203,11 +1409,3 @@ const value = useContext(MyContext);
 ## 22. mongoose를 이용한 mongoDB 연동 실습
 
 ## 23. JWT를 통한 회원 인증 시스템 구현하기
-
-## 24. 프런트앤드 프로젝트: 시작 및 인증 구현
-
-## 25. 프런트엔드 프로적트: 글쓰기 기능 구현하기
-
-## 26. 프런트엔드 프로젝트: 포스트 조회 기능 구현하기
-
-## 27. 프런트엔드 프로젝트: 수정/삭제 기능 구현 및 마무리
